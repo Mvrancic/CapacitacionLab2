@@ -7,6 +7,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
+
 // capacitación back:
 app.use(express.json());
 
