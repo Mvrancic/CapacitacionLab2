@@ -19,7 +19,8 @@ app.get('/todo', (req, res) => {
     res.json(todo_list);
 });
 
-//post, agrega un item a la lista to do
+
+//post, agrega UN item a la lista to do
 app.post('/todo', (req, res) => {
     const todo = req.body;
     todo.id = id;
@@ -27,6 +28,25 @@ app.post('/todo', (req, res) => {
     todo_list.push(todo);
     res.json(todo);
 });
+
+
+//post, pero agregando items directamente en forma de lista
+app.post('/todos', (req, res) => {
+    const todos = req.body;
+
+    if (!Array.isArray(todos)) {
+        return res.status(400).json({ error: 'Request body must be an array of items.' });
+    }
+
+    todos.forEach(todo => {
+        todo.id = id;
+        id++;
+        todo_list.push(todo);
+    });
+
+    res.json(todo_list);
+});
+
 
 //put, modifica un item de la lista to do
 app.put('/todo/:id', (req, res) => {
@@ -47,7 +67,8 @@ app.put('/todo/:id', (req, res) => {
     res.json(todo_list);
 });
 
-//delete, elimina un item de la lista to do
+
+//delete, elimina UN item de la lista to do
 app.delete('/todo/:id', (req, res) => {
     const { id } = req.params;
     const todo = todo_list.find(todo => todo.id === parseInt(id));
@@ -59,6 +80,15 @@ app.delete('/todo/:id', (req, res) => {
     todo_list = todo_list.filter(todo => todo.id !== parseInt(id));
     res.json(todo_list);
 });
+
+
+//delete, elimina TODOS los items de la lista to do
+app.delete('/todos/all', (req, res) => {
+    todo_list = [];
+    id = 1;
+    res.json(todo_list);
+});
+
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
